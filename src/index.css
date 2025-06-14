@@ -1,58 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
-  --secondary: #6d28d9;
-  --accent: #f59e0b;
-  --background: #f8fafc;
-  --card-bg: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-light: #94a3b8;
-  --border: #e2e8f0;
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --info: #0ea5e9;
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+  }
 }
 
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--background);
-  color: var(--text-primary);
-  line-height: 1.6;
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .btn-primary {
+    @apply bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500;
+  }
+  
+  .btn-outline {
+    @apply border border-gray-300 bg-transparent hover:bg-gray-50 focus:ring-gray-500;
+  }
+  
+  .btn-ghost {
+    @apply hover:bg-gray-100 text-gray-700;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  }
+  
+  .input {
+    @apply flex h-10 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .input-error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-card border border-gray-200;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-card-hover transition-shadow duration-200;
+  }
+  
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  line-height: 1.2;
-  font-weight: 600;
-}
-
-a {
-  text-decoration: none;
-  color: var(--primary);
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: var(--primary-dark);
-}
-
-.container {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.page-container {
-  min-height: calc(100vh - 140px);
-  padding: 2rem 0;
+@layer utilities {
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 /* Custom utility classes */
@@ -65,7 +92,7 @@ a:hover {
 }
 
 .btn-primary {
-  @apply bg-blue-600 hover:bg-blue-700 text-white;
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors;
 }
 
 .btn-secondary {
@@ -77,7 +104,7 @@ a:hover {
 }
 
 .btn-outline {
-  @apply border border-gray-300 hover:bg-gray-50 text-gray-800;
+  @apply border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium rounded-md transition-colors;
 }
 
 /* Form styles */
@@ -94,11 +121,12 @@ a:hover {
 }
 
 /* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+.fade-in { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+/* smooth everywhere */
+* {
+  transition: background-color 0.2s var(--tw-transition-timing-function),
+              color 0.2s var(--tw-transition-timing-function),
+              transform 0.2s var(--tw-transition-timing-function);
 }

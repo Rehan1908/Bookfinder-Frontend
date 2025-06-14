@@ -1,31 +1,30 @@
-import axios from 'axios';
+import api from './api';
 
-const API_URL = '/api/auth/';
-
-export const register = async (userData) => {
-  const response = await axios.post(`${API_URL}register`, userData);
-  return response.data;
-};
-
-export const login = async (userData) => {
-  const response = await axios.post(`${API_URL}login`, userData);
-  return response.data;
-};
-
-export const getProfile = async () => {
-  const response = await axios.get(`${API_URL}profile`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
-  return response.data;
-};
-
-// Also export as a default object for compatibility
 const authService = {
-  register,
-  login,
-  getProfile,
+  login: async (credentials) => {
+    const response = await api.post('/users/login', credentials);
+    return response.data;
+  },
+
+  register: async (userData) => {
+    const response = await api.post('/users/register', userData);
+    return response.data;
+  },
+
+  logout: async () => {
+    const response = await api.post('/users/logout');
+    return response.data;
+  },
+
+  getProfile: async () => {
+    const response = await api.get('/users/profile');
+    return response.data;
+  },
+
+  updateProfile: async (userData) => {
+    const response = await api.put('/users/profile', userData);
+    return response.data;
+  }
 };
 
 export default authService;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getBooks, getReviewsByBookId } from '../services/bookService';
+import * as bookService from '../services/bookService';
 
 export const useBooks = () => {
   const [books, setBooks] = useState([]);
@@ -10,10 +10,10 @@ export const useBooks = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await getBooks(searchQuery, page, limit);
-      setBooks(response.books);
+      const response = await bookService.getBooks(searchQuery, page, limit);
+      setBooks(response.books || []);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Failed to fetch books');
     } finally {
       setLoading(false);
     }
@@ -21,16 +21,7 @@ export const useBooks = () => {
 
   const addReview = async (bookId, reviewData) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/books/${bookId}/reviews`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(reviewData)
-      });
-      return await response.json();
+      return await bookService.addReview(bookId, reviewData);
     } catch (err) {
       throw new Error(err.message);
     }
@@ -43,5 +34,4 @@ export const useBooks = () => {
   return { books, loading, error, fetchBooks, addReview };
 };
 
-// Also keep the default export for backward compatibility
 export default useBooks;

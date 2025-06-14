@@ -1,50 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Rating from '../common/Rating';
-import { truncateText } from '../../utils/helpers';
+import Button from '../common/Button';
 
 const BookCard = ({ book }) => {
-  // Default image if book.coverURL is missing
-  const coverImage = book.coverURL || 'https://via.placeholder.com/150x225?text=No+Cover';
+  const [imageError, setImageError] = useState(false);
   
+  const defaultCover = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDIwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik03NSA5MEg5MFY5NUg3NVY5MFpNNzUgMTAwSDEyNVYxMDVINzVWMTAwWk03NSAxMTBIMTI1VjExNUg3NVYxMTBaTTc1IDEyMEgxMjVWMTI1SDc1VjEyMFpNNzUgMTMwSDEyNVYxMzVINzVWMTMwWk03NSAxNDBIMTI1VjE0NUg3NVYxNDBaTTc1IDE1MEgxMjVWMTU1SDc1VjE1MFpNNzUgMTYwSDEyNVYxNjVINzVWMTYwWk03NSAxNzBIMTI1VjE3NUg3NVYxNzBaTTc1IDE4MEgxMjVWMTg1SDc1VjE4MFpNNzUgMTkwSDEyNVYxOTVINzVWMTkwWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K';
+
   return (
-    <div className="card group h-full flex flex-col">
-      <div className="relative overflow-hidden aspect-[2/3]">
-        <img 
-          src={coverImage} 
-          alt={book.title} 
-          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+    <div className="card card-hover group transition-all duration-300 hover:scale-[1.02] max-w-xs">
+      <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 rounded-t-xl">
+        <img
+          src={imageError ? defaultCover : book.coverURL || defaultCover}
+          alt={book.title}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          onError={() => setImageError(true)}
+          loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 flex items-end justify-center transition-opacity duration-300">
-          <Link 
-            to={`/books/${book._id}`} 
-            className="btn-primary mb-4 mx-4 w-full text-center py-2"
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <Button
+            as={Link}
+            to={`/books/${book._id}`}
+            variant="primary"
+            size="sm"
+            className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
           >
             View Details
-          </Link>
+          </Button>
         </div>
       </div>
-      <div className="p-4 flex flex-col flex-grow">
-        <h3 className="text-lg font-bold line-clamp-1 hover:text-blue-600">
-          <Link to={`/books/${book._id}`}>{book.title}</Link>
+      
+      <div className="p-3 space-y-1">
+        <h3 className="font-heading font-semibold text-base leading-tight line-clamp-2">
+          <Link 
+            to={`/books/${book._id}`} 
+            className="hover:text-brand-600 transition-colors"
+          >
+            {book.title}
+          </Link>
         </h3>
-        <p className="text-gray-600 mb-2">by {book.author}</p>
-        <div className="flex items-center mt-1 mb-3">
-          <Rating rating={book.avgRating || 0} />
-          <span className="ml-2 text-sm text-gray-500">
-            {book.numReviews || 0} {book.numReviews === 1 ? 'review' : 'reviews'}
+        
+        <p className="text-gray-600 text-sm line-clamp-1">
+          by {book.author}
+        </p>
+        
+        {book.genre && (
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700">
+            {book.genre}
           </span>
-        </div>
-        {book.description && (
-          <p className="text-gray-700 text-sm line-clamp-3 mb-3 flex-grow">
-            {truncateText(book.description, 120)}
-          </p>
         )}
-        <div className="mt-auto">
-          <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-            {book.genre || 'Fiction'}
-          </span>
-        </div>
       </div>
     </div>
   );
