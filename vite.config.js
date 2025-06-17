@@ -16,5 +16,16 @@ export default defineConfig({
   },
   define: {
     global: 'globalThis',
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['clsx']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
   }
 })
